@@ -33,6 +33,8 @@ client.on('message', message => {
           client.commands.get('ping').execute(message, args);
      } else if (command === 'angry') {
           client.commands.get('angry').execute(message, args);
+     } else if (command === 'create-rooms') {
+         client.commands.get('create-rooms').execute(message, args);
      }
 });
 
