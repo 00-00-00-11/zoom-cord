@@ -14,19 +14,19 @@ module.exports = {
                     pairs.push([student1, student2]);
                }
           }
-          console.log('here');
+
+          let count = 1;
           pairs.forEach( async (pair, i) => {
-               i++;
-               const pairRole = await message.guild.roles.create({ data: {name: `Pair ${i}`}})
-               // const pairRoom = await message.guild.channels.create(`Pairing room ${i}`, {
-               //      type: 'voice'
-               // });
-               pair.forEach(async person => {
-                    console.log(person.joinedTimestamp)
-                    await person._roles.add(pairRole);
+               const pairRole = await message.guild.roles.create({ data: {name: `Pair ${count}`}})
+               const pairRoom = await message.guild.channels.create(`Pairing room ${count}`, {
+                    type: 'voice'
                });
+               const currUser = await message.guild.members.fetch(pair[i].first().id);
+               currUser.roles.add(pairRole);
+
                pairRoom.updateOverwrite(message.guild.roles.everyone, { VIEW_CHANNEL: false });
                pairRoom.updateOverwrite(pairRole, { VIEW_CHANNEL: true });
+               count++;
           });
      }
 }
