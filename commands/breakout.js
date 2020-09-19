@@ -21,8 +21,11 @@ module.exports = {
                const pairRoom = await message.guild.channels.create(`Pairing room ${count}`, {
                     type: 'voice'
                });
-               const currUser = await message.guild.members.fetch(pair[i].first().id);
-               currUser.roles.add(pairRole);
+               pair.forEach(async person => {
+                    const currUser = await message.guild.members.fetch(person.first().id);
+                    currUser.roles.add(pairRole);
+               });
+
 
                pairRoom.updateOverwrite(message.guild.roles.everyone, { VIEW_CHANNEL: false });
                pairRoom.updateOverwrite(pairRole, { VIEW_CHANNEL: true });
