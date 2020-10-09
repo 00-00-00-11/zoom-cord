@@ -29,12 +29,22 @@ client.on('message', message => {
      const args = message.content.slice(prefix.length).split(/ +/);
      const command = args.shift().toLowerCase();
 
-     if (command === 'ping') {
-          client.commands.get('ping').execute(message, args);
-     } else if (command === 'angry') {
-          client.commands.get('angry').execute(message, args);
-     } else if (command === 'breakout') {
-         client.commands.get('breakout').execute(message, args);
+     switch (command) {
+          case 'ping':
+               client.commands.get('ping').execute(message, args);
+               break;
+          case 'angry':
+               client.commands.get('angry').execute(message, args);
+               break
+          case 'breakout':
+               client.commands.get('breakout').execute(message, args);
+               break
+          case 'close':
+               client.commands.get('close').execute(message)
+               break;
+          default:
+               message.channel.send('Invalid command')
+               break;
      }
 });
 
