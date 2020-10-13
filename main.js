@@ -37,11 +37,13 @@ client.on('message', message => {
                client.commands.get('angry').execute(message, args);
                break
           case 'breakout':
-               client.commands.get('breakout').execute(message, args);
+               client.commands.get('breakout').execute(message, args, prefix);
                break
           case 'close':
                client.commands.get('close').execute(message)
                break;
+          case 'setup':
+               client.commands.get('setup').execute(message)
           default:
                message.channel.send('Invalid command')
                break;
