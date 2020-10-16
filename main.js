@@ -44,6 +44,7 @@ client.on('message', message => {
                break;
           case 'setup':
                client.commands.get('setup').execute(message)
+               break;
           default:
                message.channel.send('Invalid command')
                break;

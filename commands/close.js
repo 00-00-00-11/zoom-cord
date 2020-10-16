@@ -5,7 +5,7 @@ module.exports = {
         message.guild.channels.cache.forEach(channel => {
             async function deleteChannel(channel, name) {
                 const fetchedChannel = await message.guild.channels.cache.find(channel => channel.name === name)
-                if (fetchedChannel.name.startsWith('Pairing room')) {
+                if (fetchedChannel.name.includes('room') && fetchedChannel.type !== 'category') {
                     fetchedChannel.delete()
                 }
             }
