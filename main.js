@@ -48,6 +48,9 @@ client.on('message', message => {
           case 'check':
                client.commands.get('check').execute(message)
                break
+          case 'move-back':
+               client.commands.get('move-back').execute(message)
+               break
           default:
                message.channel.send('Invalid command')
                break;

@@ -1,61 +1,19 @@
-async function deleteChannel(channels, name) {
-    const fetchedChannel = await channels.cache.find(channel => channel.name === name)
+function deleteChannel(channels, name) {
+    const fetchedChannel = channels.cache.find(channel => channel.name === name)
     if (fetchedChannel.name.includes('room') && fetchedChannel.type !== 'category') {
         fetchedChannel.delete()
     }
 }
-
-async function moveUsers(channels, channel) {
-    const main = await channels.cache.find(c => c.name === 'Main')
-    for (member of channel.members) {
-        async function mover() {
-            if (member.voice.channelID) {
-                await member.voice.setChannel(main)
-            }
-        }
-        mover()
-    }
-}
-
 module.exports = {
     name: 'close',
-    description: 'Delete pair rooms and roles',
+    description: 'Delete pair rooms and roles (does not move users back to main room)',
     async execute(message) {
+
         const channels = message.guild.channels
         const roles = message.guild.roles
-        console.log(channels.cache)
+        let moveWaiter = true
 
-        await Promise.all(channels.cache.map(channel => {
-            console.log(channel)
-        }))
-        // message.guild.channels.cache.forEach(channel => {
-
-            // async function moveDeleteWrap() {
-            //     async function moveWrapper() {
-            //         await moveUsers(channels, channel)
-            //     }
-            //     await moveWrapper()
-
-            //     async function deleteWrapper() {
-            //         await deleteChannel(channels, channel.name)
-            //     }
-            //     await deleteWrapper()
-            // }
-            // moveDeleteWrap()
-            // async function moveAndDelete() {
-            //     const main = await channels.cache.find(c => c.name === 'Main')
-            //     await channel.members.forEach(member => {
-            //         async function mover() {
-            //             if (member.voice.channelID) {
-            //                 await member.voice.setChannel(main)
-            //             }
-            //         }
-            //         mover()
-            //     })
-            //     await deleteChannel(channels, channel.name)
-            // }
-
-            // moveAndDelete()
+        channels.cache.forEach(channel => deleteChannel(channels, channel.name))
 
         message.guild.roles.cache.forEach(role => {
             async function deleteRole(role, name) {
