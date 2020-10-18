@@ -30,12 +30,6 @@ client.on('message', message => {
      const command = args.shift().toLowerCase();
 
      switch (command) {
-          case 'ping':
-               client.commands.get('ping').execute(message, args);
-               break;
-          case 'angry':
-               client.commands.get('angry').execute(message, args);
-               break
           case 'breakout':
                client.commands.get('breakout').execute(message, args, prefix);
                break
@@ -45,11 +39,13 @@ client.on('message', message => {
           case 'setup':
                client.commands.get('setup').execute(message)
                break;
-          case 'check':
-               client.commands.get('check').execute(message)
-               break
           case 'move-back':
                client.commands.get('move-back').execute(message)
+               break
+          case 'help':
+               client.commands.forEach(com => {
+                    message.channel.send(`\`\`\`\nName: ${com.name}\nDescription: ${com.description}\n\`\`\``)
+               })
                break
           default:
                message.channel.send('Invalid command')
