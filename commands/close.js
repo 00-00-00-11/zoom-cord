@@ -11,7 +11,6 @@ module.exports = {
 
         const channels = message.guild.channels
         const roles = message.guild.roles
-        let moveWaiter = true
 
         channels.cache.forEach(channel => deleteChannel(channels, channel.name))
 
