@@ -2,6 +2,7 @@ const discord = require('discord.js');
 const client = new discord.Client();
 const dotenv = require('dotenv-flow').config();
 const fs = require('fs');
+const autoRole = require('./autoRole')
 
 client.commands = new discord.Collection();
 
@@ -19,8 +20,9 @@ const {
      PREFIX: prefix
 } = dotenv.parsed;
 
-client.once('ready', ()=> {
+client.once('ready', () => {
     console.log('Ready to zoom!');
+    autoRole(client)
 });
 
 client.on('message', message => {

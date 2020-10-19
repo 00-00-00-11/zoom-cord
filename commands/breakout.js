@@ -42,8 +42,15 @@ module.exports = {
                     parent: classroom
                });
 
+               const pairChat = await channels.create(`Pair chat ${i}`, {
+                    type: 'text',
+                    parent: classroom
+               });
+
                pairRoom.updateOverwrite(roles.everyone, { VIEW_CHANNEL: false });
                pairRoom.updateOverwrite(pairRole, { VIEW_CHANNEL: true });
+               pairChat.updateOverwrite(roles.everyone, { VIEW_CHANNEL: false })
+               pairChat.updateOverwrite(pairRole, { VIEW_CHANNEL: true })
 
                pair.forEach(async person => {
                     person.roles.add(pairRole);

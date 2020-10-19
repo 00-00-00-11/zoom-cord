@@ -1,6 +1,6 @@
 function deleteChannel(channels, name) {
     const fetchedChannel = channels.cache.find(channel => channel.name === name)
-    if (fetchedChannel.name.includes('room') && fetchedChannel.type !== 'category') {
+    if (fetchedChannel.name.includes('room') && fetchedChannel.type !== 'category' || fetchedChannel.name.startsWith('pair-chat')) {
         fetchedChannel.delete()
     }
 }
