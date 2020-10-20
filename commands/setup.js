@@ -16,6 +16,14 @@ module.exports = {
         const teacherRole = await roles.create({ data: { name: 'Teacher', permissions: ['ADMINISTRATOR', 'PRIORITY_SPEAKER'], hoist: true }})
         const studentRole = await roles.create({ data: { name: 'Student' }})
 
+        async function createChannel(classObj) {
+            await channels.create(classObj.name, {
+                type: classObj.type,
+                parent: classObj.parent || null,
+                permissionOverwrites: classObj.perms || null
+            })
+        }
+
         const author = await guild.members.cache.get(message.author.id)
         author.roles.add(teacherRole)
 
@@ -23,24 +31,13 @@ module.exports = {
             type: 'category'
         })
 
-        const questionsChat = await channels.create('questions', {
-            type: 'text',
-            parent: classroom
-        })
+        const classroomChildren = [
+            { name: 'questions', type: 'text', parent: classroom },
+            { name: 'class-chat', type: 'text', parent: classroom },
+            { name: 'Main', type: 'voice', parent: classroom, perms: [{ id: studentRole.id, deny: ['USE_VAD'] }, { id: roles.everyone, deny: ['USE_VAD']} ]}
+        ]
 
-        const mainChat = await channels.create('class-chat', {
-            type: 'text',
-            parent: classroom
-        })
-
-        const mainRoom = await channels.create('Main', {
-            type: 'voice',
-            parent: classroom,
-            permissionOverwrites: [
-                { id: studentRole.id, deny: ['USE_VAD'] },
-                { id: roles.everyone, deny: ['USE_VAD'] }
-            ]
-        })
+        classroomChildren.forEach(child => createChannel(child))
 
         channels.cache.forEach(channel => {
             if (channel.parent != classroom && channel != classroom) {
@@ -57,22 +54,6 @@ module.exports = {
             ]
         })
 
-        const discussion = await channels.create('discussion', {
-            type: 'text',
-            parent: teacherArea
-        })
-
-        const plans = await channels.create('planning', {
-            type: 'text',
-            parent: teacherArea
-        })
-
-        const teachResources = await channels.create('resources', {
-            type: 'text',
-            parent: teacherArea
-        })
-
-
         const resources = await channels.create('Resources', {
             type: 'category',
             permissionOverwrites: [
@@ -82,88 +63,47 @@ module.exports = {
             ]
         })
 
-        const announcements = await channels.create('announcements', {
-            type: 'text',
-            parent: resources
-        })
-
-        const files = await channels.create('files', {
-            type: 'text',
-            parent: resources
-        })
-
-        const vidsArts = await channels.create('videos-and-articles', {
-            type: 'text',
-            parent: resources
-        })
-
-        const resRepos = await channels.create('repos', {
-            type: 'text',
-            parent: resources
-        })
-
         const hangout = await channels.create('Hangout', {
             type: 'category'
-        })
-
-        const chat = await channels.create('chat', {
-            type: 'text',
-            parent: hangout
-        })
-
-        const codeTalk = await channels.create('code-talk', {
-            type: 'text',
-            parent: hangout
-        })
-
-        const repoShare = await channels.create('repo-share', {
-            type: 'text',
-            parent: hangout
-        })
-
-        repoShare.send(`Bot's repo: https://github.com/sholt20/zoom-cord`)
-
-        const memes = await channels.create('memes', {
-            type: 'text',
-            parent: hangout
-        })
-
-        const voiceChat = await channels.create('General', {
-            type: 'voice',
-            parent: hangout
         })
 
         const help = await channels.create('Help', {
             type: 'category'
         })
 
-        const jsHelp = await channels.create('js-help', {
-            type: 'text',
-            parent: help
-        })
+        const childChannels = [
+            { name: 'discussion', type: 'text', parent: teacherArea },
+            { name: 'planning', type: 'text', parent: teacherArea },
+            { name: 'resources', type: 'text', parent: teacherArea },
+            { name: 'Teacher Talk', type: 'voice', parent: teacherArea },
+            { name: 'announcements', type: 'text', parent: resources },
+            { name: 'files', type: 'text', parent: resources },
+            { name: 'videos-and-articles', type: 'text', parent: resources },
+            { name: 'files', type: 'text', parent: resources },
+            { name: 'repos', type: 'text', parent: resources },
+            { name: 'chat', type: 'text', parent: hangout },
+            { name: 'code-talk', type: 'text', parent: hangout },
+            { name: 'repo-share', type: 'text', parent: hangout },
+            { name: 'memes', type: 'text', parent: hangout },
+            { name: 'General', type: 'voice', parent: hangout },
+            { name: 'js-help', type: 'text', parent: help },
+            { name: 'py-help', type: 'text', parent: help },
+            { name: 'ruby-help', type: 'text', parent: help },
+            { name: 'other-help', type: 'text', parent: help },
+        ]
 
-        const pyHelp = await channels.create('py-help', {
-            type: 'text',
-            parent: help
-        })
+        childChannels.forEach(child => createChannel(child))
 
-        const rubyHelp = await channels.create('ruby-help', {
-            type: 'text',
-            parent: help
-        })
-
-        const otherHelp = await channels.create('other-help', {
-            type: 'text',
-            parent: help
-        })
 
         for (let i = 1; i < 4; i++) {
-            channels.create(`Study Room ${i}`, {
+            await channels.create(`Study Room ${i}`, {
                 type: 'voice',
                 parent: help
             })
         }
 
+        const repoShare = await channels.cache.find(c => c.name.toLowerCase() === 'repo-share')
+        repoShare.send(`Bot's repo: https://github.com/sholt20/zoom-cord`)
 
     }
 }
