@@ -16,6 +16,9 @@ module.exports = {
         const teacherRole = await roles.create({ data: { name: 'Teacher', permissions: ['ADMINISTRATOR', 'PRIORITY_SPEAKER'], hoist: true }})
         const studentRole = await roles.create({ data: { name: 'Student' }})
 
+        const author = await guild.members.cache.get(message.author.id)
+        author.roles.add(teacherRole)
+
         const classroom = await channels.create('Classroom', {
             type: 'category'
         })
@@ -34,10 +37,8 @@ module.exports = {
             type: 'voice',
             parent: classroom,
             permissionOverwrites: [
-                {
-                    id: studentRole.id,
-                    deny: ['USE_VAD']
-                }
+                { id: studentRole.id, deny: ['USE_VAD'] },
+                { id: roles.everyone, deny: ['USE_VAD'] }
             ]
         })
 
@@ -46,6 +47,31 @@ module.exports = {
                 channel.delete()
             }
         })
+
+        const teacherArea = await channels.create('Teacher Area', {
+            type: 'category',
+            permissionOverwrites: [
+                {id: studentRole.id, deny: ['VIEW_CHANNEL']},
+                {id: roles.everyone, deny: ['VIEW_CHANNEL']},
+                {id: teacherRole.id, allow: ['VIEW_CHANNEL']}
+            ]
+        })
+
+        const discussion = await channels.create('discussion', {
+            type: 'text',
+            parent: teacherArea
+        })
+
+        const plans = await channels.create('planning', {
+            type: 'text',
+            parent: teacherArea
+        })
+
+        const teachResources = await channels.create('resources', {
+            type: 'text',
+            parent: teacherArea
+        })
+
 
         const resources = await channels.create('Resources', {
             type: 'category',
@@ -71,7 +97,73 @@ module.exports = {
             parent: resources
         })
 
-        const author = await guild.members.cache.get(message.author.id)
-        author.roles.add(teacherRole)
+        const resRepos = await channels.create('repos', {
+            type: 'text',
+            parent: resources
+        })
+
+        const hangout = await channels.create('Hangout', {
+            type: 'category'
+        })
+
+        const chat = await channels.create('chat', {
+            type: 'text',
+            parent: hangout
+        })
+
+        const codeTalk = await channels.create('code-talk', {
+            type: 'text',
+            parent: hangout
+        })
+
+        const repoShare = await channels.create('repo-share', {
+            type: 'text',
+            parent: hangout
+        })
+
+        repoShare.send(`Bot's repo: https://github.com/sholt20/zoom-cord`)
+
+        const memes = await channels.create('memes', {
+            type: 'text',
+            parent: hangout
+        })
+
+        const voiceChat = await channels.create('General', {
+            type: 'voice',
+            parent: hangout
+        })
+
+        const help = await channels.create('Help', {
+            type: 'category'
+        })
+
+        const jsHelp = await channels.create('js-help', {
+            type: 'text',
+            parent: help
+        })
+
+        const pyHelp = await channels.create('py-help', {
+            type: 'text',
+            parent: help
+        })
+
+        const rubyHelp = await channels.create('ruby-help', {
+            type: 'text',
+            parent: help
+        })
+
+        const otherHelp = await channels.create('other-help', {
+            type: 'text',
+            parent: help
+        })
+
+        for (let i = 1; i < 4; i++) {
+            channels.create(`Study Room ${i}`, {
+                type: 'voice',
+                parent: help
+            })
+        }
+
+
     }
 }
