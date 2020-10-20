@@ -44,6 +44,9 @@ client.on('message', message => {
           case 'move-back':
                client.commands.get('move-back').execute(message)
                break
+          case 'poll':
+               client.commands.get('poll').execute(message, args)
+               break;
           case 'help':
                client.commands.forEach(com => {
                     message.channel.send(`\`\`\`\nName: ${com.name}\nDescription: ${com.description}\n\`\`\``)

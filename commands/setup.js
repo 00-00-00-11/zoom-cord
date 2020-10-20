@@ -34,7 +34,8 @@ module.exports = {
         const classroomChildren = [
             { name: 'questions', type: 'text', parent: classroom },
             { name: 'class-chat', type: 'text', parent: classroom },
-            { name: 'Main', type: 'voice', parent: classroom, perms: [{ id: studentRole.id, deny: ['USE_VAD'] }, { id: roles.everyone, deny: ['USE_VAD']} ]}
+            { name: 'Main', type: 'voice', parent: classroom, perms: [{ id: studentRole.id, deny: ['USE_VAD'] }, { id: roles.everyone, deny: ['USE_VAD']} ]},
+            { name: 'bot-commands', type: 'text', parent: classroom}
         ]
 
         classroomChildren.forEach(child => createChannel(child))

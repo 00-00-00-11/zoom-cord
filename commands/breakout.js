@@ -8,6 +8,13 @@ module.exports = {
           const roles = guild.roles
           const members = guild.members
 
+          const teacherRole = roles.cache.find(r => r.name.toLowerCase() === 'teacher')
+
+          if (!message.member.roles.cache.has(teacherRole.id)) {
+               message.channel.send('Only teachers can use this command')
+               return;
+          }
+
           const classroom = channels.cache.find(c => c.name.toLowerCase() === 'classroom' && c.type === 'category')
           if (!classroom) {
                message.channel.send('Please run the setup command first, or create a category called Classroom')

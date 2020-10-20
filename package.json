@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.3.1",
+    "discord.js-poll-embed": "^1.0.2",
     "dotenv-flow": "^3.2.0",
     "per-env": "^1.0.2"
   },

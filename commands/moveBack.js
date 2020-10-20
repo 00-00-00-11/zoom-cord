@@ -16,6 +16,14 @@ module.exports = {
     async execute(message, args) {
         const guild = message.guild
         const channels = guild.channels
+        const roles = guild.roles
+
+        const teacherRole = roles.cache.find(r => r.name.toLowerCase() === 'teacher')
+
+        if (!message.member.roles.cache.has(teacherRole.id)) {
+             message.channel.send('Only teachers can use this command')
+             return;
+        }
 
         const classroom = channels.cache.find(c => c.name.toLowerCase() === 'classroom' && c.type === 'category')
         classroom.children.forEach(channel => {

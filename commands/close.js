@@ -12,6 +12,13 @@ module.exports = {
         const channels = message.guild.channels
         const roles = message.guild.roles
 
+        const teacherRole = roles.cache.find(r => r.name.toLowerCase() === 'teacher')
+
+        if (!message.member.roles.cache.has(teacherRole.id)) {
+             message.channel.send('Only teachers can use this command')
+             return;
+        }
+
         channels.cache.forEach(channel => deleteChannel(channels, channel.name))
 
         message.guild.roles.cache.forEach(role => {
