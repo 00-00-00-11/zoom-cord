@@ -104,7 +104,7 @@ module.exports = {
         }
 
         const repoShare = await channels.cache.find(c => c.name.toLowerCase() === 'repo-share')
-        repoShare.send(`Bot's repo: https://github.com/sholt20/zoom-cord`)
+        repoShare.send(`Bot's repo: https://github.com/Cthulhuhub/zoom-cord`)
 
     }
 }
