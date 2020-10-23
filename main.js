@@ -27,7 +27,6 @@ client.once('ready', () => {
 
 client.on('message', message => {
      if (!message.content.startsWith(prefix) || message.author.bot) return;
-
      const args = message.content.slice(prefix.length).split(/ +/);
      const command = args.shift().toLowerCase();
 
@@ -46,6 +45,9 @@ client.on('message', message => {
                break
           case 'poll':
                client.commands.get('poll').execute(message, args)
+               break;
+          case 'countdown':
+               client.commands.get('countdown').execute(message, args)
                break;
           case 'help':
                client.commands.forEach(com => {
