@@ -31,6 +31,16 @@ module.exports = {
                message.channel.send(`Please close rooms (you can use ${prefix}close) before opening more`)
                return
           }
+
+          const type = args.shift().toLowerCase()
+          if (type.startsWith('<@')) {
+               message.channel.send('Please provide a type of either open (to allow students to go between rooms freely) or closed (so students only see their room) as the first argument')
+               return
+          } else if (type != 'open' && type != 'closed') {
+               message.channel.send('Please provide a type of either open (to allow students to go between rooms freely) or closed (so students only see their room) as the first argument')
+               return
+          }
+
           let pairs = [];
           for (let i = 0; i < args.length; i += 2) {
                let student1 = await members.cache.get(args[i].substring(3, 21));
@@ -55,9 +65,15 @@ module.exports = {
                });
 
                pairRoom.updateOverwrite(roles.everyone, { VIEW_CHANNEL: false });
-               pairRoom.updateOverwrite(pairRole, { VIEW_CHANNEL: true });
-               pairChat.updateOverwrite(roles.everyone, { VIEW_CHANNEL: false })
-               pairChat.updateOverwrite(pairRole, { VIEW_CHANNEL: true })
+               pairChat.updateOverwrite(roles.everyone, { VIEW_CHANNEL: false });
+               if (type === 'closed') {
+                    await pairRoom.updateOverwrite(pairRole, { VIEW_CHANNEL: true });
+                    await pairChat.updateOverwrite(pairRole, { VIEW_CHANNEL: true });
+               } else if (type === 'open') {
+                    const studentRole = await roles.cache.find(r => r.name === "Student")
+                    await pairRoom.updateOverwrite(studentRole, { VIEW_CHANNEL: true });
+                    await pairChat.updateOverwrite(studentRole, { VIEW_CHANNEL: true });
+               }
 
                pair.forEach(async person => {
                     person.roles.add(pairRole);
