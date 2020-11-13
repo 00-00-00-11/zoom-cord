@@ -8,7 +8,7 @@ This bot aims to merge the functionality of zoom and slack (based purely on the 
 Generates the pair programming rooms (group variant is on the way).
 Requires two arguments to function:
  - Type: this is either open or closed, and dictates whether or not students are able to freely move between pairing rooms
- - Students: this is simply the list of students mentioned. They will be put into rooms based on their order in the list. First mentioned student
+ - Students: this is simply the list of students mentioned. They will be put into rooms based on their order in the list. First mentioned student and
    second mentioned student will be paired in a room together.
    
 It, alongside the room creation, adds pair roles and a text channel for each pair. If the type is closed, the pair can only see their pairing room and chat channel,
